@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.miniDashboard {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.informacoesResumo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.informoes {
+    flex: 1;
+    background-color: #e7f3ff;
+    border: 1px solid #b3c7e6;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    margin: 0 10px;
+}
+
+.informoes h1 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #0056b3;
+}
+
+.informoes h1:nth-child(2) {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.ButtonAdicional {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.ButtonAdicional button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5bc0de;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ButtonAdicional button:hover {
+    background-color: #0056b3;
+}
+
+.rodaPe{
+    width: 90%;
+    margin-left: 5%;
+    display: grid;
+    border-radius: 15px;
+    background-color: #ffffff;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: 100%;
+}
+.buttons{
+    width: 100%;
+    height: 100%;
+    margin-left: 5%;
+    min-height: 200px;
+    display: flex;
+    margin-top: 4%;
+    border-bottom: 12px;
+    flex-direction: column;
+    min-height: 200px;
+    gap: 10px;
+}
+.buttons h1{
+    font-size: 20px;
+    margin-left: 5%;
+}
+.buttons button{
+    border: none;
+    min-height: 30px;
+    border-radius: 5px;
+    background-color: #5bc0de;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.graficoCrescente {
+    max-width: 1200px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.graficoCrescente img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
