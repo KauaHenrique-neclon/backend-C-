@@ -2,89 +2,81 @@
 #include <iostream>
 #include <string>
 #include <pqxx/pqxx>
-#include <iostream>
 #include <fstream>
-
+#include <sstream>
+#include <exception>
 
 // incluir blueprint
-#include "controllers/loginControlles.h"
-#include "controllers/homeControlles.h"
-#include "controllers/cadastroControlles.h"
-
-
-
-class Log : public crow::ILogHandler{
-    public:
-        void log(std::string message,  crow::LogLevel level) override {
-            std::string levelStd;
-            switch (level){
-                case crow::LogLevel::Debug:
-                    levelStd = "DEBUG";
-                    break;
-                case crow::LogLevel::Info:
-                    levelStd = "INFO";
-                    break;
-                case crow::LogLevel::Error:
-                    levelStd = "ERROR";
-                    break;
-                case crow::LogLevel::Warning:
-                    levelStd = "WARNING";
-                    break;
-                case crow::LogLevel::Critical:
-                    levelStd = "CRITICAL";
-                    break;
-                default:
-                    levelStd = "UNKNOWN";
-                    break;
-                }
-
-            std::cout << "[" << levelStd << "] " << message << std::endl;
-        }
-};
+#include "controllers/login/loginBlueprint.hpp"
+//#include "log/log.hpp"
+#include "conexao/conectar.hpp"
 
 crow::response serve_file(const std::string &path) {
     std::ifstream file("static/" + path, std::ios::binary);
     if (!file) {
-        return crow::response(404); 
+        return crow::response(404);
     }
 
-    std::stringstream buffer;
+    std::ostringstream buffer;
     buffer << file.rdbuf();
     return crow::response{buffer.str()};
 }
 
-int main() {
-    std::ofstream errorLog("error_log.txt");
 
+int main() {
     crow::SimpleApp app;
 
-    try {
-        
+    //app.loglevel(crow::LogLevel::Debug);
 
-        LoginBlueprint::LoginMetodo(app);
-        HomeBlueprint::homeMetodo(app);
-        cadastroBlueprint::cadastroMetodo(app);
+    DatabaseConnection dbConn;
 
+    PGconn* conn = dbConn.getConnection();
 
-
-        Log logHandler;
-        app.loglevel(crow::LogLevel::Debug);
-
-        app.loglevel(crow::LogLevel::Debug).port(18080).run();
-    } catch (const std::exception& e) {
-        errorLog << "Erro: " << e.what() << std::endl;
-        std::cout << "Ocorreu um erro, verifique o arquivo error_log.txt" << std::endl;
+    if(!conn){
+        std::cerr << "Erro ao iniciar conexao ao banco de dados" << std::endl;
+        return 1;
     }
 
-    errorLog.close();
-
+    std::cout << "Iniciando o aplicativo..." << std::endl;
 
     CROW_ROUTE(app, "/static/<path>")([&](const std::string &path) {
         return serve_file(path);
     });
 
-    // Mantém o console aberto
-    std::cout << "Pressione qualquer tecla para sair...";
+    std::ofstream errorLog("erros.txt", std::ios::app);
+    if (!errorLog) {
+        std::cerr << "Erro ao abrir o arquivo de log!" << std::endl;
+        return 1;
+    }
+
+    try {
+
+        std::cout << "Chamada para LoginMetodo..." << std::endl;
+        LoginBlueprint loginBlueprint;
+        loginBlueprint.LoginMetodo(app, conn);
+        std::cout << "LoginMetodo executado com sucesso." << std::endl;
+
+        
+        app.port(18080).run();
+
+        // .concurrency(4)
+        //std::cout << "Servidor iniciado. Pressione enter para sair..." << std::endl;
+        //std::cin.get();
+
+    
+
+    } catch (const std::exception &e) {
+        errorLog << "Erro no código: " << e.what() << std::endl;
+        std::cerr << "Erro no código: " << e.what() << std::endl;
+        errorLog.flush();
+    } catch (...) {
+        errorLog << "Erro desconhecido ocorreu." << std::endl;
+        std::cerr << "Erro desconhecido ocorreu." << std::endl;
+        errorLog.flush();
+    }
+
+    errorLog.close();
+    std::cout << "Pressione enter para sair..." << std::endl;
     std::cin.get();
 
     return 0;
