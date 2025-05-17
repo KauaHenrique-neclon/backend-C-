@@ -27,4 +27,4 @@
 // executavel
 //  g++ -std=c++17 -o "output/app.exe" "app.cpp" "controllers/login/loginBlueprint.h" -I"C:/msys64/mingw64/include" -I"C:/msys64/mingw64/include/crow" -I"C:/msys64/mingw64/include/asio" -lws2_32 -lmswsock -lpqxx -lpq
 
-//  g++ -std=c++17 -o "output/app.exe" "app.cpp" "controllers/login/loginControlles.cpp" "models/login/loginModel.cpp" -I"C:/msys64/mingw64/include" -I"C:/msys64/mingw64/include/crow" -I"C:/msys64/mingw64/include/asio" -lws2_32 -lmswsock -lpqxx -lpq
+// g++ -std=c++17 -o "output/app.exe" "app.cpp" "controllers/login/loginControlles.cpp" "models/login/loginModel.cpp" -I"C:/msys64/mingw64/include" -I"C:/msys64/mingw64/include/crow" -I"C:/msys64/mingw64/include/asio" -lws2_32 -lmswsock -lpqxx -lpq
